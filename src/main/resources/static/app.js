@@ -33,7 +33,11 @@ function crearDocumento(){
        });
 
  };
-
+function enviarTexto(){
+    
+    
+    
+};
  
 function saveTextAsFile()
 {      
