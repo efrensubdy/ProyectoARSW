@@ -25,13 +25,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <script src="/webjars/stomp-websocket/stomp.min.js"></script>
         <script src="/app.js"></script>
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-        <script>tinymce.init({ selector:'textarea' });</script>
     </head>
 
 
     
     <body>
-        <div>Bienvenido de vuelta a la Aplicación</div>
-         <textarea>Edite el texto con el comenzará</textarea>
+        <div id="sa">Bienvenido de vuelta a la Aplicación  </div>
+        <button id="boton1">Nuevo Documento</button>
+        <button id="boton2" onclick="saveTextAsFile()">Guardar Documento</button>
+        
     </body>
 </html>
