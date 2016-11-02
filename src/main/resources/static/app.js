@@ -1,15 +1,15 @@
 var stompClient = null;
 var tinymce;
+var docName = null;
 
 function connect() {
-    var socket = new SockJS('/stompendproyecto');
+    var socket = new SockJS('/stompendpoint');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
+       console.log('Connected: ' + frame);
         
-        stompClient.subscribe('/topic/TOPICOXX', function (data) {
-           
-            
+        stompClient.subscribe("/topic/textupdate/{docName}", function (data) {
+           tinymce.activeEditor.setContent(data.body);
         });
     });
 }
@@ -21,24 +21,80 @@ function disconnect() {
     setConnected(false);
     console.log("Disconnected");
 }
+
+function requestDocName() {
+    docName = prompt("Ingrese el nombre del nuevo documento", "");
+}
+
+function nuevoDoc(){
+    requestDocName();
+    crearDocumento();
+}
+
 function crearDocumento(){
-       tinymce.init({
+        
+        $("#textarea").append("<textarea></textarea>");
+        
+        tinymce.init({
         selector: "textarea",
         height: 300,
         skin: 'lightgray',
             setup: function (editor) {
                 editor.on('change', function () {
-                editor.save();
+                    editor.save();
+                    //stompClient.send("/texto/" + docName, {}, tinymce.activeEditor.getContent());
+                    
+                    url = "http://localhost:8080/texto/" + docName;
+                    $.post(url, {texto: tinymce.activeEditor.getContent()}, 
+                        function( data ) {
+                            //alert("texto recibido " + tinymce.activeEditor.getContent());
+                            //actualizar los suscritos
+                            stompClient.send("/topic/textupdate/{docName}", {}, tinymce.activeEditor.getContent());
+                    }).fail(
+                        function(data){
+                            alert("ALGO MALO PASO :( " + data);
+                        }
+                    ); 
                 });
             }
        });
-
+       
+       url = "http://localhost:8080/texto";
+        $.post(url, {nombreDoc: docName}, 
+            function( data ) {
+                alert("Documento Creado");
+                //actualizar los suscritos
+        }).fail(
+            function(data){
+                alert("ALGO MALO PASO :( " + data);
+            }
+        ); 
+       
+       //stompClient.send("/texto/" + docName, {}, $("#textarea").val());
  };
 function enviarTexto(){
     
     
     
 };
+
+function abrirDoc(){
+    var nombreDoc = $("#abrir").val();
+    docName = nombreDoc;
+    
+    if(docName != null){
+        $.get( "/texto/"+docName, function( data ) {
+                crearDocumento();
+                tinymce.activeEditor.setContent(data);
+            }    
+        ).fail(
+            function(data){
+                alert(data["responseText"]);
+            }
+        ); 
+    }
+}
+
  
 function saveTextAsFile()
 {      
@@ -51,7 +107,7 @@ function saveTextAsFile()
 // nombre del archivo que se va guardar 
    var fileNameToSaveAs = "myNewFile.txt";
    
-// link con el que se ejecuta la acción
+// link con el que se ejecuta la acciÃ³n
     var downloadLink = document.createElement("a");
     downloadLink.download = fileNameToSaveAs;
 //texto para el link de descarga 
@@ -79,11 +135,13 @@ function destroyClickedElement(event)
     document.body.removeChild(event.target);
 }
  
- 
- 
+
 
 $(document).ready(
         function () {
-            //connect();
+            connect();
+            tinymce.activeEditor.on('keyup', function(e) {
+                alert("key");
+            });
         }
 );

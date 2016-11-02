@@ -21,22 +21,23 @@ import org.apache.log4j.Priority;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+
+
 @RestController
-@RequestMapping(value="/Texto")
+@RequestMapping(value="/texto")
 public class textoController {
     
     
     @Autowired
     manejadorTexto mat;
+    ManejadorDocumentos docus = new ManejadorDocumentos();
     
     
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?>manejadorDeRecurso(){
-       
+    @RequestMapping(path = "/{nombreDoc}", method = RequestMethod.GET)
+    public ResponseEntity<?>manejadorDeRecurso(@PathVariable String nombreDoc){
        ResponseEntity a;
         try {
-            //obtener datos que se enviarán a través del API
-            a = new ResponseEntity<>(mat.getDocumentos(),HttpStatus.ACCEPTED);
+            a = new ResponseEntity<>(docus.getTextoDocumento(nombreDoc),HttpStatus.ACCEPTED);
             
         } catch (Exception ex) {
             Logger.getLogger(textoController.class.getName()).log(Level.SEVERE, null, ex);
@@ -45,25 +46,47 @@ public class textoController {
        return a;
     }
     
+    /*
+    
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Texto> manejadorOrden(@PathVariable String id) {
+    public ResponseEntity<String> manejadorOrden(@PathVariable String id) {
         try {
             //System.out.println(orde + " " + mo.getOrdenes().get(orde));
             Texto a=mat.getTexto(id);
             System.out.println(a.getTexto());
-            return new ResponseEntity<>(a, HttpStatus.ACCEPTED);
+            
+            return new ResponseEntity<>("aqui", HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             org.apache.log4j.Logger.getLogger(textoController.class.getName()).log(Priority.ERROR, null, ex);
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
+    */
     
+    @RequestMapping(path = "/{docName}/{user}", method = RequestMethod.POST)
+    public ResponseEntity<?> manejadorPostOrdenes(@RequestBody String docName, String user, String texto) {
+        //Registrar
+        //mat.setTexto(texto);
+        //System.out.println(orde + " " + mo.getOrdenes().get(orde));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    
+    @RequestMapping(path = "/{nombreDoc}", method = RequestMethod.POST)
+    public ResponseEntity<?> manejadorPostOrdenes(@PathVariable String nombreDoc, String texto){
+        try {    
+            docus.setTextoDocumento(nombreDoc, texto);
+            System.out.println("el texto recibido es: " + docus.getTextoDocumento(nombreDoc));
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (Exception ex) {
+            return new ResponseEntity<>("Error bla bla bla",HttpStatus.FORBIDDEN);            
+        }  
+    }
     
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Texto> manejadorPostOrdenes(@RequestBody Texto orde) {
-        //Registrar
-        mat.setTexto(orde);
-        //System.out.println(orde + " " + mo.getOrdenes().get(orde));
+    public ResponseEntity<?> manejadorPostOrdenes(String nombreDoc) {
+        //Crear documento
+        docus.newDocumento(nombreDoc, "Pepito");
+        System.out.println("Nuevo documento creado: " + nombreDoc);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     

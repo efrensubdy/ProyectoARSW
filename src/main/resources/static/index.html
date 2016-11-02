@@ -17,12 +17,14 @@
         <header><h1>Bienvenido</h1></header>
         <div id="editor"></div>
         <div>
-            <a href="nuevoDoc.html"><button id="boton1">Nuevo Documento</button></a>
+           <!-- <a href="nuevoDoc.html"><button id="boton1">Nuevo Documento</button></a> -->
+           <button id="boton1" onclick="nuevoDoc()">Nuevo Documento</button>
+        </div>
+        <div id="textarea">
         </div>
         <div>
-            <input type="text" />
-            <button onclick="">abrir</button>
-            
+            <input id ="abrir" type="text" />
+            <button onclick="abrirDoc()">abrir</button>
         </div>
     </body>
     

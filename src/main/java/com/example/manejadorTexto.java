@@ -22,7 +22,7 @@ public class manejadorTexto {
 
     
     public manejadorTexto() {
-        documentos = new ConcurrentHashMap<String, Texto>();
+        documentos = new ConcurrentHashMap<>();
         Texto g=new Texto("hola","hola","dcdddddddddddddddddddddddd");
         this.setTexto(g);
     }
