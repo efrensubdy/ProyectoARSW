@@ -9,13 +9,15 @@ function connect() {
        console.log('Connected: ' + frame);
         
         stompClient.subscribe("/topic/textupdate/{docName}", function (data) {
+           var bm = tinymce.activeEditor.selection.getBookmark(2,true);
            tinymce.activeEditor.setContent(data.body);
+           tinymce.activeEditor.selection.moveToBookmark(bm);
         });
     });
 }
 
 function disconnect() {
-    if (stompClient != null) {
+    if (stompClient !== null) {
         stompClient.disconnect();
     }
     setConnected(false);
@@ -34,27 +36,24 @@ function nuevoDoc(){
 function crearDocumento(){
         
         $("#textarea").append("<textarea></textarea>");
-        
         tinymce.init({
         selector: "textarea",
         height: 300,
         skin: 'lightgray',
             setup: function (editor) {
                 editor.on('change', function () {
-                    editor.save();
-                    //stompClient.send("/texto/" + docName, {}, tinymce.activeEditor.getContent());
                     
                     url = "http://localhost:8080/texto/" + docName;
                     $.post(url, {texto: tinymce.activeEditor.getContent()}, 
                         function( data ) {
-                            //alert("texto recibido " + tinymce.activeEditor.getContent());
                             //actualizar los suscritos
-                            stompClient.send("/topic/textupdate/{docName}", {}, tinymce.activeEditor.getContent());
+                            stompClient.send("/topic/textupdate/{docName}", {}, editor.getContent());
                     }).fail(
                         function(data){
                             alert("ALGO MALO PASO :( " + data);
                         }
                     ); 
+                editor.save();
                 });
             }
        });
@@ -63,7 +62,6 @@ function crearDocumento(){
         $.post(url, {nombreDoc: docName}, 
             function( data ) {
                 alert("Documento Creado");
-                //actualizar los suscritos
         }).fail(
             function(data){
                 alert("ALGO MALO PASO :( " + data);
@@ -82,7 +80,7 @@ function abrirDoc(){
     var nombreDoc = $("#abrir").val();
     docName = nombreDoc;
     
-    if(docName != null){
+    if(docName !== null){
         $.get( "/texto/"+docName, function( data ) {
                 crearDocumento();
                 tinymce.activeEditor.setContent(data);
@@ -140,8 +138,5 @@ function destroyClickedElement(event)
 $(document).ready(
         function () {
             connect();
-            tinymce.activeEditor.on('keyup', function(e) {
-                alert("key");
-            });
         }
 );
