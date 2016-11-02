@@ -74,6 +74,18 @@
 	  <version>0.32</version>
 	  <type>jar</type>
 	 </dependency>
+	 <dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-messaging</artifactId>
+	  <version>4.3.3.RELEASE</version>
+	  <type>jar</type>
+	 </dependency>
+	 <dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-websocket</artifactId>
+	  <version>4.3.3.RELEASE</version>
+	  <type>jar</type>
+	 </dependency>
 	</dependencies>
 
 	<build>
