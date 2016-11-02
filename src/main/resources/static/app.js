@@ -22,9 +22,10 @@ function disconnect() {
     console.log("Disconnected");
 }
 function crearDocumento(){
-       $("#texteditor").append("<textarea id="+"\"cuadro\""+"></textarea>");
        tinymce.init({
         selector: "textarea",
+        height: 300,
+        skin: 'lightgray',
             setup: function (editor) {
                 editor.on('change', function () {
                 editor.save();

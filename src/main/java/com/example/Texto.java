@@ -12,17 +12,27 @@ import java.util.ArrayList;
  * @author sebastian
  */
 public class Texto {
-    private int id;
     private String nombre;
     private String texto;
+    private String autor;
     private ArrayList<Integer> colaboradores;
 
-    public int getId() {
-        return id;
+    Texto() {
+        
+    }
+    
+    Texto(String nombre, String autor, String t) {
+        this.nombre=nombre;
+        this.texto =t;
+        this.autor=autor;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getAutor() {
+        return autor;
+    }
+
+    public void setAutor(String id) {
+        this.autor = id;
     }
 
     public String getNombre() {
