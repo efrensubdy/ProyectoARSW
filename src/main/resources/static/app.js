@@ -22,7 +22,7 @@ function disconnect() {
     console.log("Disconnected");
 }
 function crearDocumento(){
-       $("#sa").append("<textarea id="+"cuadro"+"></textarea>");
+       $("#texteditor").append("<textarea id="+"\"cuadro\""+"></textarea>");
        tinymce.init({
         selector: "textarea",
             setup: function (editor) {
@@ -80,9 +80,5 @@ function destroyClickedElement(event)
 $(document).ready(
         function () {
             //connect();
-            $( "#boton1" ).click(function() { crearDocumento(); });
-            console.info('connecting to websockets');
-             
-           
         }
 );
