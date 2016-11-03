@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -83,7 +84,7 @@ public class textoController {
     public ResponseEntity<?> manejadorPostOrdenes(@PathVariable String nombreDoc, String texto){
         try {    
             docus.setTextoDocumento(nombreDoc, texto);
-            System.out.println("el nombre es : " + nombreDoc + " el texto recibido es: " + docus.getTextoDocumento(nombreDoc));
+            //System.out.println("el nombre es : " + nombreDoc + " el texto recibido es: " + docus.getTextoDocumento(nombreDoc));
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             return new ResponseEntity<>("Error bla bla bla",HttpStatus.FORBIDDEN);            
@@ -95,12 +96,13 @@ public class textoController {
         //Crear documento
         //cambiar Pepito por usuario cuando la funcionalidad este lista
         docus.newDocumento(nombreDoc, "Pepito");
-        System.out.println("Nuevo documento creado: " + nombreDoc);
+        //System.out.println("Nuevo documento creado: " + nombreDoc);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     
     @MessageMapping("/textupdate/{docName}")
     public void manejadorMensajesDocumentos(@DestinationVariable("docName") String docName, String word){
-        msgt.convertAndSend("/docu/textupdate/" + docName, word);
+        //System.out.println("doc: " + docName + " word: "+ word);
+        msgt.convertAndSend("/topic/textupdate/" + docName, word);
     };
 }

@@ -1,6 +1,6 @@
 var stompClient = null;
 var tinymce;
-var docName = null;
+var docName = "";
 
 function connect() {
     var socket = new SockJS('/stompendpoint');
@@ -8,7 +8,7 @@ function connect() {
     stompClient.connect({}, function (frame) {
     console.log('Connected: ' + frame);
     
-        stompClient.subscribe("/docu/textupdate/{docName}" , function (data) {
+        stompClient.subscribe("/topic/textupdate/" + docName , function (data) {
            var bm = tinymce.activeEditor.selection.getBookmark(2,true);
            tinymce.activeEditor.setContent(data.body);
            tinymce.activeEditor.selection.moveToBookmark(bm);
@@ -34,6 +34,8 @@ function nuevoDoc(){
 }
 
 function crearDocumento(){
+    
+        connect();
         
         $("#textarea").append("<textarea></textarea>");
         tinymce.init({
@@ -46,7 +48,7 @@ function crearDocumento(){
                     $.post(url, {texto: tinymce.activeEditor.getContent()}, 
                         function( data ) {
                             //actualizar los suscritos
-                            stompClient.send("/app/textupdate/{docName}", {}, editor.getContent());
+                            stompClient.send("/app/textupdate/" + docName, {}, editor.getContent());
                     }).fail(
                         function(data){
                             alert("ALGO MALO PASO :( " + data);
@@ -90,6 +92,7 @@ function abrirDoc(){
             }
         ); 
     }
+    connect();
 }
 
  
@@ -136,6 +139,6 @@ function destroyClickedElement(event)
 
 $(document).ready(
         function () {
-            connect();
+            //connect();
         }
 );
