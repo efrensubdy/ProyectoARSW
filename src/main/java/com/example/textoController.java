@@ -19,6 +19,10 @@ import org.springframework.http.HttpStatus;
 import javax.inject.Inject;
 import org.apache.log4j.Priority;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -30,6 +34,10 @@ public class textoController {
     
     @Autowired
     manejadorTexto mat;
+    
+    @Autowired
+    SimpMessagingTemplate msgt;
+    
     ManejadorDocumentos docus = new ManejadorDocumentos();
     
     
@@ -75,7 +83,7 @@ public class textoController {
     public ResponseEntity<?> manejadorPostOrdenes(@PathVariable String nombreDoc, String texto){
         try {    
             docus.setTextoDocumento(nombreDoc, texto);
-            System.out.println("el texto recibido es: " + docus.getTextoDocumento(nombreDoc));
+            System.out.println("el nombre es : " + nombreDoc + " el texto recibido es: " + docus.getTextoDocumento(nombreDoc));
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             return new ResponseEntity<>("Error bla bla bla",HttpStatus.FORBIDDEN);            
@@ -85,9 +93,14 @@ public class textoController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> manejadorPostOrdenes(String nombreDoc) {
         //Crear documento
+        //cambiar Pepito por usuario cuando la funcionalidad este lista
         docus.newDocumento(nombreDoc, "Pepito");
         System.out.println("Nuevo documento creado: " + nombreDoc);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     
+    @MessageMapping("/textupdate/{docName}")
+    public void manejadorMensajesDocumentos(@DestinationVariable("docName") String docName, String word){
+        msgt.convertAndSend("/docu/textupdate/" + docName, word);
+    };
 }

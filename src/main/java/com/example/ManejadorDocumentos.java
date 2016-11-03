@@ -24,7 +24,6 @@ public class ManejadorDocumentos {
     };
     
     public void setTextoDocumento(String nombreDoc, String texto){
-        System.out.println("el nombre " + nombreDoc);
         documentos.get(nombreDoc).setTexto(texto);
     }
     

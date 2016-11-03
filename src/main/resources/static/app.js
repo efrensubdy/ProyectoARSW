@@ -6,9 +6,9 @@ function connect() {
     var socket = new SockJS('/stompendpoint');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-       console.log('Connected: ' + frame);
-        
-        stompClient.subscribe("/topic/textupdate/{docName}", function (data) {
+    console.log('Connected: ' + frame);
+    
+        stompClient.subscribe("/docu/textupdate/{docName}" , function (data) {
            var bm = tinymce.activeEditor.selection.getBookmark(2,true);
            tinymce.activeEditor.setContent(data.body);
            tinymce.activeEditor.selection.moveToBookmark(bm);
@@ -42,12 +42,11 @@ function crearDocumento(){
         skin: 'lightgray',
             setup: function (editor) {
                 editor.on('change', function () {
-                    
                     url = "http://localhost:8080/texto/" + docName;
                     $.post(url, {texto: tinymce.activeEditor.getContent()}, 
                         function( data ) {
                             //actualizar los suscritos
-                            stompClient.send("/topic/textupdate/{docName}", {}, editor.getContent());
+                            stompClient.send("/app/textupdate/{docName}", {}, editor.getContent());
                     }).fail(
                         function(data){
                             alert("ALGO MALO PASO :( " + data);
