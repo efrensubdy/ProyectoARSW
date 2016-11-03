@@ -44,7 +44,7 @@ function crearDocumento(){
         skin: 'lightgray',
             setup: function (editor) {
                 editor.on('change', function () {
-                    url = "http://localhost:8080/texto/" + docName;
+                    url = "/texto/" + docName;
                     $.post(url, {texto: tinymce.activeEditor.getContent()}, 
                         function( data ) {
                             //actualizar los suscritos
@@ -59,7 +59,7 @@ function crearDocumento(){
             }
        });
        
-       url = "http://localhost:8080/texto";
+       url = "/texto";
         $.post(url, {nombreDoc: docName}, 
             function( data ) {
                 alert("Documento Creado");
