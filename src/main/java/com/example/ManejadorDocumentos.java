@@ -6,29 +6,44 @@
 package com.example;
 
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author 2091412
  */
-public class ManejadorDocumentos {
+@Service
+public class ManejadorDocumentos implements ManejadorDocumentosInterfaz{
     ConcurrentHashMap<String, Documento> documentos;
     
     public ManejadorDocumentos(){
         documentos = new ConcurrentHashMap<>();
     }
     
-    public void newDocumento(String nombreDoc, String autor){
-       Documento newDoc = new Documento(nombreDoc, autor);
-       documentos.put(nombreDoc, newDoc);
+    @Override
+    public boolean newDocumento(String nombreDoc, String autor){
+        boolean valid = false;
+        if(validarNombreDocumento(nombreDoc)){
+            Documento newDoc = new Documento(nombreDoc, autor);
+            documentos.put(nombreDoc, newDoc);
+            valid = true;
+        }
+        return valid;
     };
     
+    @Override
     public void setTextoDocumento(String nombreDoc, String texto){
         documentos.get(nombreDoc).setTexto(texto);
     }
     
-    public String getTextoDocumento(String nombreDoc){
+    @Override
+    public String getTextoDocumento(String nombreDoc) throws NullPointerException{
         return documentos.get(nombreDoc).getTexto();
     }
     
+    @Override
+    public boolean validarNombreDocumento(String nombreDoc){
+        nombreDoc = nombreDoc.trim();
+        return (!documentos.containsKey(nombreDoc) && nombreDoc != null && !nombreDoc.equals(""));
+    }
 }

@@ -1,3 +1,5 @@
+/* global Promise */
+
 var stompClient = null;
 var tinymce;
 var docName = "";
@@ -25,76 +27,87 @@ function disconnect() {
 }
 
 function requestDocName() {
-    docName = prompt("Ingrese el nombre del nuevo documento", "");
-}
-
-function nuevoDoc(){
-    requestDocName();
-    crearDocumento();
-}
-
-function crearDocumento(){
+    url = "/texto";
+    var nombreDoc = prompt("Digite el nombre del nuevo documento");
     
-        connect();
-        
-        $("#textarea").append("<textarea></textarea>");
-        tinymce.init({
-        selector: "textarea",
-        height: 300,
-        skin: 'lightgray',
-            setup: function (editor) {
-                editor.on('change', function () {
-                    url = "/texto/" + docName;
-                    $.post(url, {texto: tinymce.activeEditor.getContent()}, 
-                        function( data ) {
-                            //actualizar los suscritos
-                            stompClient.send("/app/textupdate/" + docName, {}, editor.getContent());
-                    }).fail(
-                        function(data){
-                            alert("ALGO MALO PASO :( " + data);
-                        }
-                    ); 
-                editor.save();
-                });
+    if(nombreDoc !== null && nombreDoc !== ''){
+        var jsPromise = Promise.resolve($.post(url, {nombreDoc: nombreDoc}));
+
+        jsPromise.then(function(response) {
+            if(response){
+                alert("Documento creado");
+
+                docName = nombreDoc;
+                crearPantallaTexto();
+                console.log('Documento creado: ' + docName);
+            }else{
+                alert("Nombre invalido o ya existente");
             }
-       });
-       
-       url = "/texto";
-        $.post(url, {nombreDoc: docName}, 
-            function( data ) {
-                alert("Documento Creado");
-        }).fail(
-            function(data){
-                alert("ALGO MALO PASO :( " + data);
-            }
-        ); 
-       
-       //stompClient.send("/texto/" + docName, {}, $("#textarea").val());
+        });
+    }else if(nombreDoc === ''){
+        alert("No se ingreso nada");
+    }
+}
+
+function crearPantallaTexto(){
+    $("#textarea").append("<textarea></textarea>");
+    tinymce.init({
+    selector: "textarea",
+    height: 300,
+    skin: 'lightgray',
+        setup: function (editor) {
+            editor.on('change', function () {
+                url = "/texto/" + docName;
+                $.post(url, {texto: tinymce.activeEditor.getContent()}, 
+                    function( data ) {
+                        //actualizar los suscritos
+                        stompClient.send("/app/textupdate/" + docName, {}, editor.getContent());
+                }).fail(
+                    function(data){
+                        alert("ALGO MALO PASO :( " + data);
+                    }
+                ); 
+            editor.save();
+            });
+        }
+    });
+    //Se conecta
+    connect();
+    arreglarHTML();
  };
-function enviarTexto(){
-    
-    
-    
-};
 
 function abrirDoc(){
     var nombreDoc = $("#abrir").val();
-    docName = nombreDoc;
+    url = "/texto/";
     
-    if(docName !== null){
-        $.get( "/texto/"+docName, function( data ) {
-                crearDocumento();
-                tinymce.activeEditor.setContent(data);
-            }    
-        ).fail(
-            function(data){
-                alert(data["responseText"]);
-            }
-        ); 
-    }
-    connect();
+    if(nombreDoc !== null && nombreDoc !== ''){
+        var jsPromise = Promise.resolve($.get( url + nombreDoc));
+        jsPromise.then(function(response) {
+            alert("Documento abierto");
+
+            docName = nombreDoc;
+            crearPantallaTexto();
+            tinymce.activeEditor.setContent(response);
+            //Se conecta
+            connect();
+            arreglarHTML();
+            console.log('Documento abierto: ' + docName);
+        },function() {
+            alert("El documento no existe");
+        });
+    }else if(nombreDoc === ''){
+            alert("No se ingreso nada");
+    };
+    
+    
 }
 
+function arreglarHTML(){
+    //Oculta los botones y elementos iniciales
+    $("#elementos").hide();
+    //Muestra el nombre del documento actual
+    $("#nombreDocu").html("<h1>"+ docName +"</h1>");
+}
  
 function saveTextAsFile()
 {      
