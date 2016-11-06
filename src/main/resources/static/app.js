@@ -98,8 +98,6 @@ function abrirDoc(){
     }else if(nombreDoc === ''){
             alert("No se ingreso nada");
     };
-    
-    
 }
 
 function arreglarHTML(){

@@ -6,12 +6,14 @@
 package com.example;
 
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
  *
  * @author 2091412
  */
+@Component
 @Service
 public class ManejadorDocumentos implements ManejadorDocumentosInterfaz{
     ConcurrentHashMap<String, Documento> documentos;
@@ -21,6 +23,7 @@ public class ManejadorDocumentos implements ManejadorDocumentosInterfaz{
     }
     
     @Override
+    @AnotacionUsuario
     public boolean newDocumento(String nombreDoc, String autor){
         boolean valid = false;
         if(validarNombreDocumento(nombreDoc)){
