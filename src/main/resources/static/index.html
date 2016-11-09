@@ -20,8 +20,15 @@
         <div id="pantallaLogin" class="login-card">
             <h1>Ingresar</h1><br>
             <div>
-              <input type="text" name="user" placeholder="Username">
-              <input type="password" name="pass" placeholder="Password">
+                <div id="userDiv">
+                    <input id="username" type="text" name="user" placeholder="Username">
+                    <p id="failUser" style="color:red">Ingrese su usuario</p>
+                </div>
+                
+                <div id="passDiv">
+                    <input id="password" type="password" name="pass" placeholder="Password">
+                    <p role="alert" id="failPass" style="color:red">Ingrese su contraseña</p>
+                </div>
               <input type="submit" name="login" class="login login-submit" value="login" onclick="loginUser()">
             </div>
 

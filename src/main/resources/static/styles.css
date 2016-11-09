@@ -122,3 +122,7 @@ textArea {
   text-align: center;
   font-size: 12px;
 }
+
+#failPassword{
+  border: 1.5px solid red;
+}

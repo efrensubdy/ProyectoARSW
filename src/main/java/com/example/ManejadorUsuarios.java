@@ -30,7 +30,7 @@ public class ManejadorUsuarios {
     
     public ManejadorUsuarios(){
         usuarios = new ConcurrentHashMap<>();
-        Usuario newUser = new Usuario("pepito","PP", "asd");
+        Usuario newUser = new Usuario("pepito","pepito", "asd");
         usuarios.put("pepito", newUser);
     }
     

@@ -15,11 +15,17 @@ public class Usuario {
     private String username;
     private String password;
     
+    public Usuario(){
+        
+    }
+    
     public Usuario(String nombre, String username, String password){
+        super();
         this.nombre = nombre;
         this.username = username;
         this.password = password;
     }
+    
     
     
     public String getNombre() {

@@ -42,8 +42,7 @@ public class DocumentsResourceController {
     /* Temporal
     TODO Aspecto de usuarios
     @Autowired
-    ManejadorUsuarios users;
-    */
+    ManejadorUsuarios users;*/
     
     @AnotacionUsuario
     @RequestMapping(path = "/{nombreDoc}", method = RequestMethod.GET)

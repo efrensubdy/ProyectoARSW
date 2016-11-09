@@ -1,5 +1,11 @@
 /* global Promise */
 
+function Usuario(nombre,username,password){
+    this.nombre = nombre;
+    this.username = username;
+    this.password = password;
+}
+
 var stompClient = null;
 var tinymce;
 var docName = "";
@@ -109,10 +115,55 @@ function arreglarHTML(){
 }
 
 function loginUser(){
+    url = "/user/login";
+    var usuario = new Usuario("pepito","pepito","asd");
+    
+    var nombre = $("#username").val();
+    var password = $("#password").val();
+    
+    if(nombre === ''){
+        $("#failUser").show();
+        $("#username").c
+    }else{
+        $("#failUser").hide(); 
+    }
+    
+    if(password === ''){
+        $("#failPass").show();
+    }else{
+        $("#failPass").hide();
+    }
     
     
-    $("#pantallaLogin").hide();
-    $("#seleccionDocu").show();
+    
+   /*
+    if(nombreDoc !== null && nombreDoc !== ''){
+        var jsPromise = Promise.resolve($.post(url, {nombreDoc: nombreDoc}));
+
+        jsPromise.then(function(response) {
+            if(response){
+                alert("Documento creado");
+
+                docName = nombreDoc;
+                crearPantallaTexto();
+                console.log('Documento creado: ' + docName);
+            }else{
+                alert("Nombre invalido o ya existente");
+            }
+        });
+    }else if(nombreDoc === ''){
+        alert("No se ingreso nada");
+    }
+    
+    */
+    
+    
+    //$.post(url, JSON.stringify(usuario), null,"json");
+
+    
+    
+    //$("#pantallaLogin").hide();
+    //$("#seleccionDocu").show();
     //alert("login");
 }
  
@@ -162,5 +213,7 @@ $(document).ready(
         function () {
             //connect();
             $("#seleccionDocu").hide();
+            $("#failUser").hide(); 
+            $("#failPass").hide();
         }
 );
