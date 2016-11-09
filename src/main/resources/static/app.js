@@ -103,8 +103,17 @@ function abrirDoc(){
 function arreglarHTML(){
     //Oculta los botones y elementos iniciales
     $("#elementos").hide();
+    $("#pantallaLogin").hide();
     //Muestra el nombre del documento actual
     $("#nombreDocu").html("<h1>"+ docName +"</h1>");
+}
+
+function loginUser(){
+    
+    
+    $("#pantallaLogin").hide();
+    $("#seleccionDocu").show();
+    //alert("login");
 }
  
 function saveTextAsFile()
@@ -149,7 +158,9 @@ function destroyClickedElement(event)
 
 
 $(document).ready(
+        
         function () {
             //connect();
+            $("#seleccionDocu").hide();
         }
 );

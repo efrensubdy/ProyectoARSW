@@ -30,6 +30,8 @@ public class ManejadorUsuarios {
     
     public ManejadorUsuarios(){
         usuarios = new ConcurrentHashMap<>();
+        Usuario newUser = new Usuario("pepito","PP", "asd");
+        usuarios.put("pepito", newUser);
     }
     
     @Around("@annotation(AnotacionUsuario) && execution(* *(..))")

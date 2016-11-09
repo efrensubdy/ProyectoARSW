@@ -9,19 +9,38 @@
         <script src="/webjars/stomp-websocket/stomp.min.js"></script>
         <script src="/app.js"></script>
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+        
+        <link rel="stylesheet" href="styles.css" media="screen" type="text/css" />
+        <!-- <link rel='stylesheet' href='http://codepen.io/assets/libs/fullpage/jquery-ui.css'> -->
     </head>
 
 
     
     <body>
-        <header id="nombreDocu"><h1>Bienvenido</h1></header>
-        <div id="elementos">
+        <div id="pantallaLogin" class="login-card">
+            <h1>Ingresar</h1><br>
             <div>
-               <button id="boton1" onclick="requestDocName()">Nuevo Documento</button>
+              <input type="text" name="user" placeholder="Username">
+              <input type="password" name="pass" placeholder="Password">
+              <input type="submit" name="login" class="login login-submit" value="login" onclick="loginUser()">
             </div>
-            <div>
-                <input id ="abrir" type="text" />
-                <button onclick="abrirDoc()">Abrir Documento</button> 
+
+            <div class="login-help">
+              <a href="#">Registrarse</a> • <a href="#">Contraseña olvidada</a>
+            </div>
+        </div>
+        
+        
+        <div id="seleccionDocu">
+            <header id="nombreDocu"><h1>Bienvenido</h1></header>
+            <div id="elementos">
+                <div>
+                   <button id="boton1" onclick="requestDocName()">Nuevo Documento</button>
+                </div>
+                <div>
+                    <input id ="abrir" type="text" />
+                    <button onclick="abrirDoc()">Abrir Documento</button> 
+                </div>
             </div>
         </div>
         <div id="textarea"></div>

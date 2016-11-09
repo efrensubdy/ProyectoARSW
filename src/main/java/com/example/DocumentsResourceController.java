@@ -22,10 +22,13 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
-
+@Component
+@Service
 @RestController
 @RequestMapping(value="/texto")
 public class DocumentsResourceController {
@@ -42,6 +45,7 @@ public class DocumentsResourceController {
     ManejadorUsuarios users;
     */
     
+    @AnotacionUsuario
     @RequestMapping(path = "/{nombreDoc}", method = RequestMethod.GET)
     public ResponseEntity<?> manejadorGetTextoDocumento(@PathVariable String nombreDoc){
         ResponseEntity a;
@@ -53,6 +57,7 @@ public class DocumentsResourceController {
         }        
         return a;
     }
+    
     
     @RequestMapping(path = "/{nombreDoc}/{user}", method = RequestMethod.POST)
     public ResponseEntity<?> manejadorNewDocumentoUser(@DestinationVariable("nombreDoc") String nombreDoc, @DestinationVariable("user") String user) {
