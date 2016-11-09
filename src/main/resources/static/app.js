@@ -162,8 +162,8 @@ function loginUser(){
 
     
     
-    //$("#pantallaLogin").hide();
-    //$("#seleccionDocu").show();
+    $("#pantallaLogin").hide();
+    $("#seleccionDocu").show();
     //alert("login");
 }
  
