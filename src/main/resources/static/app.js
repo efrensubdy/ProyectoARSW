@@ -57,6 +57,7 @@ function requestDocName() {
 
 function crearPantallaTexto(){
     $("#textarea").append("<textarea></textarea>");
+    $("#textarea").append("<button onclick"+"=exportar()"+">Exportar Documento</button>");
     tinymce.init({
     selector: "textarea",
     height: 300,
@@ -167,16 +168,15 @@ function loginUser(){
     //alert("login");
 }
  
-function saveTextAsFile()
+function exportar()
 {      
-    alert(document.getElementById("cuadro").value );
-    
-    var textToWrite = document.getElementById("cuadro").value;
+    alert(tinymce.activeEditor.getContent());
+    var textToWrite = tinymce.activeEditor.getContent();
     
 //  crea un Blob que es Un objeto Blob representa un objeto tipo fichero de  datos planos inmutables
     var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
 // nombre del archivo que se va guardar 
-   var fileNameToSaveAs = "myNewFile.txt";
+   var fileNameToSaveAs = prompt("Digite el nombre del  documento que va a exportar");
    
 // link con el que se ejecuta la acciÃ³n
     var downloadLink = document.createElement("a");
