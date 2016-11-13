@@ -56,8 +56,9 @@ function requestDocName() {
 }
 
 function crearPantallaTexto(){
-    $("#textarea").append("<textarea></textarea>");
+    $("#textarea").append("<textarea id="+"test"+"></textarea>");
     $("#textarea").append("<button onclick"+"=exportar()"+">Exportar Documento</button>");
+    $("#textarea").append("<button onclick"+"=lines()"+">lineas</button>");
     tinymce.init({
     selector: "textarea",
     height: 300,
@@ -204,6 +205,17 @@ function destroyClickedElement(event)
 {
 // remuevo el elemento del documento 
     document.body.removeChild(event.target);
+}
+function lines()
+{       
+    //Cuenta las lineas que haya en el documento
+	var text = document.getElementById('test');
+	var cnt = (text.cols);
+
+	var lineCount = (text.value.length / cnt);
+	var lineBreaksCount = (text.value.split('\r\n'));
+	alert(lineBreaksCount.length);
+	alert(Math.round(lineCount)+1);
 }
  
 
