@@ -6,6 +6,7 @@
 package com.example;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,22 +35,21 @@ public class ManejadorUsuarios {
         usuarios.put("pepito", newUser);
     }
     
-    @Around("@annotation(AnotacionUsuario) && execution(* *(..))")
-    private Object verificarLogin(ProceedingJoinPoint  joinPoint){
-        //Default Object that we can use to return to the consumer
-        Object returnObject = null;
-        try {
-            System.out.println("YourAspect's aroundAdvice's body is now executed Before yourMethodAround is called.");
-            //We choose to continue the call to the method in question
-            returnObject = joinPoint.proceed();
-            //If no exception is thrown we should land here and we can modify the returnObject, if we want to.
-        } catch (Throwable ex) {
-            Logger.getLogger(ManejadorUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+    public boolean loginUsuario(Usuario user){
+        return usuarios.get(user.getUsername()).getPassword().equals(user.getPassword());
+    }
+    
+    public boolean registrarUsuario(Usuario user) throws Exception{
+        if(!usuarios.containsKey(user.getUsername()) && !usuarios.containsKey(user.getNombre())){
+            usuarios.put(user.getUsername(), user);
+            return true;
+        }else{
+            throw new Exception();
         }
-        finally {
-            //If we want to be sure that some of our code is executed even if we get an exception
-            System.out.println("YourAspect's aroundAdvice's body is now executed After yourMethodAround is called.");
-        }
-        return returnObject;
-    }    
+    }
+    
+    public Object[] getDocumentosUsuario(Usuario user){
+        return usuarios.get(user.getUsername()).getDocumentosNames().toArray();
+    }
+    
 }

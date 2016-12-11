@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Proyecto ARSW - Registrar</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="/webjars/jquery/jquery.min.js"></script>
+        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+        <script src="/app.js"></script>
+        <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+
+        <link rel="stylesheet" href="styles.css" media="screen" type="text/css" />
+        <!-- <link rel='stylesheet' href='http://codepen.io/assets/libs/fullpage/jquery-ui.css'> -->
+    </head>
+
+
+
+    <body>
+        <div id="seleccionDocu">
+            <header id="nombreDocu"><h1>Bienvenido</h1></header>
+            <div id="elementos">
+                <div>
+                   <button id="boton1" onclick="requestDocName()">Nuevo Documento</button>
+                </div>
+                <div>
+                    <input id ="abrir" type="text" />
+                    <button onclick="abrirDoc()">Abrir Documento</button> 
+                </div>
+               
+                <form th:action="@{/logout}" method="post">
+                    <input type="submit" value="Sign Out"/>
+                </form>
+            </div>
+        </div>
+        <p>Click <a th:href="@{/hello}">here</a> to see a greeting.</p>
+        <div id="textarea"></div>
+    </body>
+
+</html>

@@ -5,6 +5,9 @@
  */
 package com.example;
 
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  *
  * @author Juan Pablo
@@ -15,8 +18,10 @@ public class Usuario {
     private String username;
     private String password;
     
+    private ConcurrentHashMap<String, Documento> documentos; 
+    
     public Usuario(){
-        
+        documentos = new ConcurrentHashMap<>();
     }
     
     public Usuario(String nombre, String username, String password){
@@ -25,8 +30,6 @@ public class Usuario {
         this.username = username;
         this.password = password;
     }
-    
-    
     
     public String getNombre() {
         return nombre;
@@ -50,6 +53,15 @@ public class Usuario {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public void addDocumento(Documento documento){
+        if(!documentos.containsKey(documento.getNombreDoc()))
+            documentos.put(documento.getNombreDoc(), documento);
+    }
+    
+    public ArrayList<String> getDocumentosNames(){
+        return new ArrayList<>(documentos.keySet());
     }
    
 }

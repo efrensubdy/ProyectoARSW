@@ -18,39 +18,24 @@
     
     <body>
         <div id="pantallaLogin" class="login-card">
-            <h1>Ingresar</h1><br>
+            <h1>Ingresar</h1>
             <div>
                 <div id="userDiv">
-                    <input id="username" type="text" name="user" placeholder="Username">
+                    <input id="username" type="text" name="user" placeholder="Username" onkeypress="Javascript: if(event.keyCode === 13)loginUser();">
                     <p id="failUser" style="color:red">Ingrese su usuario</p>
                 </div>
-                
+
                 <div id="passDiv">
-                    <input id="password" type="password" name="pass" placeholder="Password">
+                    <input id="password" type="password" name="pass" placeholder="Password" onkeypress="Javascript: if(event.keyCode === 13)loginUser();">
                     <p role="alert" id="failPass" style="color:red">Ingrese su contraseña</p>
                 </div>
-              <input type="submit" name="login" class="login login-submit" value="login" onclick="loginUser()">
+                <input type="submit" name="login" class="login login-submit" value="Login" onclick="loginUser()">
             </div>
 
             <div class="login-help">
-              <a href="#">Registrarse</a> • <a href="#">Contraseña olvidada</a>
+                <a href="registrar.html" >Registrarse</a> - <a href="#">Contraseña olvidada</a>
             </div>
         </div>
-        
-        
-        <div id="seleccionDocu">
-            <header id="nombreDocu"><h1>Bienvenido</h1></header>
-            <div id="elementos">
-                <div>
-                   <button id="boton1" onclick="requestDocName()">Nuevo Documento</button>
-                </div>
-                <div>
-                    <input id ="abrir" type="text" />
-                    <button onclick="abrirDoc()">Abrir Documento</button> 
-                </div>
-            </div>
-        </div>
-        <div id="textarea"></div>
     </body>
     
 </html>

@@ -29,14 +29,36 @@ public class UsersResourceController {
     
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> manejadorLoginUser(Usuario user) {
-        //Crear documento con el usuario que lo creo
         ResponseEntity a;
         try {
-            System.out.println("User login 2");
-            a = new ResponseEntity<>(true, HttpStatus.ACCEPTED);
+            a = new ResponseEntity<>(users.loginUsuario(user), HttpStatus.ACCEPTED);
         } catch (Exception ex) {
-            Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
-            a = new ResponseEntity<>("Error bla bla bla",HttpStatus.NOT_FOUND);
+            //Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            a = new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }        
+        return a;
+    }
+    
+    @RequestMapping(path = "/registrer", method = RequestMethod.POST)
+    public ResponseEntity<?> manejadorRegistrerUser(Usuario user) {
+        ResponseEntity a;
+        try {
+            a = new ResponseEntity<>(users.registrarUsuario(user), HttpStatus.ACCEPTED);
+        } catch (Exception ex) {
+            //Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            a = new ResponseEntity<>("Usuario ya existe", HttpStatus.NOT_FOUND);
+        }        
+        return a;
+    }
+    
+    @RequestMapping(path = "/documents", method = RequestMethod.POST)
+    public ResponseEntity<?> manejadorDocumentsUser(Usuario user) {
+        ResponseEntity a;
+        try {
+            a = new ResponseEntity<>(users.getDocumentosUsuario(user), HttpStatus.ACCEPTED);
+        } catch (Exception ex) {
+            //Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            a = new ResponseEntity<>("No existen documentos", HttpStatus.NOT_FOUND);
         }        
         return a;
     }

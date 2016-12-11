@@ -9,6 +9,9 @@ function Usuario(nombre,username,password){
 var stompClient = null;
 var tinymce;
 var docName = "";
+var name = "";
+var username = "";
+var password = "";
 
 function connect() {
     var socket = new SockJS('/stompendpoint');
@@ -83,6 +86,11 @@ function crearPantallaTexto(){
     connect();
     arreglarHTML();
  };
+ 
+function getDocs(){
+    
+} 
+ 
 
 function abrirDoc(){
     var nombreDoc = $("#abrir").val();
@@ -116,61 +124,95 @@ function arreglarHTML(){
     $("#nombreDocu").html("<h1>"+ docName +"</h1>");
 }
 
-function loginUser(){
-    url = "/user/login";
-    var usuario = new Usuario("pepito","pepito","asd");
+function checkTextBoxes(){
+    username = $("#username").val();
+    password = $("#password").val();
     
-    var nombre = $("#username").val();
-    var password = $("#password").val();
+    var userGood = false;
+    var passGood = false;
     
-    if(nombre === ''){
+    if(username === ''){
         $("#failUser").show();
-        $("#username").c
+        userGood = false;
     }else{
         $("#failUser").hide(); 
+        userGood = true;
     }
     
     if(password === ''){
         $("#failPass").show();
+        passGood = false;
     }else{
         $("#failPass").hide();
+        passGood = true;
     }
     
+    if(userGood && passGood){
+        return true;
+    }
     
+    return false;
+}
+
+function loginUser(){
+    url = "/user/login";
     
-   /*
-    if(nombreDoc !== null && nombreDoc !== ''){
-        var jsPromise = Promise.resolve($.post(url, {nombreDoc: nombreDoc}));
-
-        jsPromise.then(function(response) {
-            if(response){
-                alert("Documento creado");
-
-                docName = nombreDoc;
-                crearPantallaTexto();
-                console.log('Documento creado: ' + docName);
-            }else{
-                alert("Nombre invalido o ya existente");
+    if(checkTextBoxes()){
+        //post para comprobar usuario
+        $.ajax({
+            url: url,
+            data: {
+                nombre: username,
+                username: username,
+                password: password
+            },
+            type: 'POST',
+            success: function() {
+                alert("Bienvenido");
+                $("#pantallaLogin").hide();
+                $("#seleccionDocu").show();
+                window.location="docu.html";
             }
+        }).fail( function(){
+            alert("Datos Inválidos");
         });
-    }else if(nombreDoc === ''){
-        alert("No se ingreso nada");
+    }
+}
+
+function registrerUser(){
+    url = "/user/registrer";
+    name = $("#justname").val();
+    var nomGood = false;
+    
+    if(name === ''){
+        $("#failName").show();
+        nomGood = false;
+    }else{
+        $("#failName").hide(); 
+        nomGood = true;
     }
     
-    */
-    
-    
-    //$.post(url, JSON.stringify(usuario), null,"json");
-
-    
-    
-    $("#pantallaLogin").hide();
-    $("#seleccionDocu").show();
-    //alert("login");
+    if(checkTextBoxes() && nomGood){
+        //post para registrar usuario
+        $.ajax({
+            url: url,
+            data: {
+                nombre: name,
+                username: username,
+                password: password
+            },
+            type: 'POST',
+            success: function() {
+                alert("Registro completo");
+                window.location="index.html";
+            }
+        }).fail( function(data){
+            alert(data.responseText);
+        });
+    }
 }
  
-function exportar()
-{      
+function exportar(){      
     alert(tinymce.activeEditor.getContent());
     var textToWrite = tinymce.activeEditor.getContent();
     
@@ -201,30 +243,28 @@ function exportar()
     downloadLink.click();
 }
  
-function destroyClickedElement(event)
-{
-// remuevo el elemento del documento 
+function destroyClickedElement(event){
+    // remuevo el elemento del documento 
     document.body.removeChild(event.target);
 }
-function lines()
-{       
+
+function lines(){       
     //Cuenta las lineas que haya en el documento
-	var text = document.getElementById('test');
-	var cnt = (text.cols);
+    var text = document.getElementById('test');
+    var cnt = (text.cols);
 
-	var lineCount = (text.value.length / cnt);
-	var lineBreaksCount = (text.value.split('\r\n'));
-	alert(lineBreaksCount.length);
-	alert(Math.round(lineCount)+1);
+    var lineCount = (text.value.length / cnt);
+    var lineBreaksCount = (text.value.split('\r\n'));
+    alert(lineBreaksCount.length);
+    alert(Math.round(lineCount)+1);
 }
- 
-
 
 $(document).ready(
         
         function () {
             //connect();
-            $("#seleccionDocu").hide();
+            $("#seleccionDocu").show();
+            $("#failName").hide(); 
             $("#failUser").hide(); 
             $("#failPass").hide();
         }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Proyecto ARSW</title>
+        <title>Proyecto ARSW - Registrar</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/webjars/jquery/jquery.min.js"></script>
@@ -9,18 +9,34 @@
         <script src="/webjars/stomp-websocket/stomp.min.js"></script>
         <script src="/app.js"></script>
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+        
+        <link rel="stylesheet" href="styles.css" media="screen" type="text/css" />
+        <!-- <link rel='stylesheet' href='http://codepen.io/assets/libs/fullpage/jquery-ui.css'> -->
     </head>
 
 
     
     <body>
-        <header><h1>Bienvenido</h1></header>
-        <div id="editor"></div>
-        <div>
-        </div>
-        <div id="textarea">
-        </div>
-        <div>
+        <div id="pantallaLogin" class="login-card">
+            <h1>Registrar</h1>
+            <div>
+                <div id="nameDiv">
+                    <input id="justname" type="text" name="name" placeholder="Name" onkeypress="Javascript: if (event.keyCode===13) registrerUser();">
+                    <p id="failName" style="color:red">Ingrese su nombre</p>
+                </div>
+                <div id="userDiv">
+                    <input id="username" type="text" name="user" placeholder="Username" onkeypress="Javascript: if (event.keyCode===13) registrerUser();">
+                    <p id="failUser" style="color:red">Ingrese su usuario</p>
+                </div>
+                <div id="passDiv">
+                    <input id="password" type="password" name="pass" placeholder="Password" onkeypress="Javascript: if (event.keyCode===13) registrerUser();">
+                    <p role="alert" id="failPass" style="color:red">Ingrese su contraseña</p>
+                </div>
+              <input type="submit" name="login" class="login login-submit" value="Registrar" onclick="registrerUser()">
+            </div>
+
+            <div class="login-help">
+            </div>
         </div>
     </body>
     

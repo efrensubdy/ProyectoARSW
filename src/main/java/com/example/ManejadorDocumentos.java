@@ -23,7 +23,6 @@ public class ManejadorDocumentos implements ManejadorDocumentosInterfaz{
     }
     
     @Override
-    @AnotacionUsuario
     public boolean newDocumento(String nombreDoc, String autor){
         boolean valid = false;
         if(validarNombreDocumento(nombreDoc)){
