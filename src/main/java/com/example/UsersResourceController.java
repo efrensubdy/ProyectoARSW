@@ -5,6 +5,8 @@
  */
 package com.example;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,11 +59,12 @@ public class UsersResourceController {
     }
     
     //incompleta
-    @RequestMapping(path = "/documents", method = RequestMethod.POST)
-    public ResponseEntity<?> manejadorDocumentsUser(Usuario user) {
+    @RequestMapping(path = "/listaDocumentos/{username}", method = RequestMethod.GET)
+    public ResponseEntity<?> manejadorDocumentsUser(@PathVariable String username) {
         ResponseEntity a;
         try {
-            a = new ResponseEntity<>(users.getDocumentosUsuario(user), HttpStatus.ACCEPTED);
+            //List<String> l = new ArrayList<String>();
+            a = new ResponseEntity<>(users.getDocumentosUsuario(username), HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             //Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
             a = new ResponseEntity<>("No existen documentos", HttpStatus.NOT_FOUND);

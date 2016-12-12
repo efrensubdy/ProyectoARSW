@@ -38,7 +38,7 @@ public class ManejadorUsuarios {
     public boolean loginUsuario(Usuario user){
         return usuarios.get(user.getUsername()).getPassword().equals(user.getPassword());
     }
-    
+     
     public boolean registrarUsuario(Usuario user) throws Exception{
         if(!usuarios.containsKey(user.getUsername())){
             usuarios.put(user.getUsername(), user);
@@ -56,8 +56,8 @@ public class ManejadorUsuarios {
         return usuarios.get(username).addDocumento(docu);
     }
     
-    public Object[] getDocumentosUsuario(Usuario user){
-        return usuarios.get(user.getUsername()).getDocumentosNames().toArray();
+    public Object[] getDocumentosUsuario(String username){
+        return usuarios.get(username).getDocumentosNames().toArray();
     }
     
     public boolean comprobarExisteDocumento(String username, Documento documento){

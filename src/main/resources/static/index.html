@@ -43,11 +43,23 @@
                    <button id="boton1" onclick="requestDocName()">Nuevo Documento</button>
                 </div>
                 <div>
-                    <input id ="abrir" type="text" />
+                    <input id ="abrir" type="text" onkeypress="Javascript: if(event.keyCode === 13)abrirDoc();">
                     <button onclick="abrirDoc()">Abrir Documento</button> 
+                </div>
+                <div id="listaDocumentosDisponibles">
                 </div>
             </div>
         </div>
-        <div id="textarea"></div>
+        <div id="documento">
+            <div id="botonesTextArea">
+                <button onclick="exportar()">Exportar</button>
+                <button onclick="lineas()">Lineas</button>
+                <button onclick="compartir()">Compartir</button>
+                <button onclick="devolverInicio()">Devolverse</button>
+            </div>
+            <div id="textarea">
+                <textarea id="test"></textarea>
+            </div>
+        </div>
     </body>
 </html>

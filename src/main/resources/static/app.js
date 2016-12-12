@@ -65,10 +65,6 @@ function requestDocName() {
 }
 
 function crearPantallaTexto(){
-    $("#textarea").append("<textarea id="+"test"+"></textarea>");
-    $("#textarea").append("<button onclick"+"=exportar()"+">Exportar</button>");
-    $("#textarea").append("<button onclick"+"=lineas()"+">Lineas</button>");
-    $("#textarea").append("<button onclick"+"=compartir()"+">Compartir</button>");
     tinymce.init({
     selector: "textarea",
     height: 300,
@@ -95,7 +91,20 @@ function crearPantallaTexto(){
  };
  
 function getDocs(){
-    
+    url = "/user/listaDocumentos/";
+    var jsPromise = Promise.resolve($.get( url + usuarioActual.username ));
+        jsPromise.then(function(response) {
+            if(parseInt(response[0]) >= 1){
+                var size = parseInt(response[0]);
+                $("#listaDocumentosDisponibles").append("<p></p>Documentos Disponibles <ul>");
+                for(var pos = 1 ; pos <= size ; pos++){
+                    $("#listaDocumentosDisponibles").append("<li>" +response[pos]+ "</li>");
+                }
+                $("#listaDocumentosDisponibles").append("</ul>");
+            }
+        },function() {
+            alert("No hay documentos");
+        });
 } 
  
 
@@ -107,9 +116,7 @@ function abrirDoc(){
         var jsPromise = Promise.resolve($.get( url + nombreDoc, {username: usuarioActual.username}));
         jsPromise.then(function(response) {
             if(response){
-                alert("Documento abierto" + "- " + response);
-                var obj = jQuery.parseJSON(response);
-                alert(obj);
+                var obj = jQuery.parseJSON(response);   
                 documentoActual = new Documento(obj.nombreDoc, obj.autor, obj.texto);
                 $("#nombreDocu").html("<h1>"+ documentoActual.nombreDoc + " - " + documentoActual.autor +"</h1>");    
                 docName = nombreDoc;
@@ -134,8 +141,16 @@ function arreglarHTML(){
     //Oculta los botones y elementos iniciales
     $("#elementos").hide();
     $("#pantallaLogin").hide();
+    $("#documento").show();
     //Muestra el nombre del documento actual
     $("#nombreDocu").html("<h1>"+ docName + " - " + usuarioActual.username +"</h1>");
+}
+
+function devolverInicio(){
+    $("#elementos").show();
+    $("#seleccionDocu").show();
+    $("#documento").hide();
+    $("#nombreDocu").html("<h1>Bienvenido - " + usuarioActual.username +"</h1>");
 }
 
 function checkTextBoxes(){
@@ -179,13 +194,18 @@ function loginUser(){
                 password: password
             },
             type: 'POST',
-            success: function() {
-                alert("Bienvenido");
-                usuarioActual = new Usuario(username, password);
-                $("#pantallaLogin").hide();
-                $("#seleccionDocu").show();
-                $("#nombreDocu").html("<h1>Bienvenido - " + usuarioActual.username +"</h1>");
-                //window.location="docu.html";
+            success: function(response) {
+                if(response){
+                    alert("Bienvenido");
+                    usuarioActual = new Usuario(username, password);
+                    $("#pantallaLogin").hide();
+                    $("#seleccionDocu").show();
+                    $("#nombreDocu").html("<h1>Bienvenido - " + usuarioActual.username +"</h1>");
+                    getDocs();
+                    //window.location="docu.html";
+                }else{
+                    alert("Contraseña Invalida");
+                }
             }
         }).fail( function(){
             alert("Datos Inválidos");
@@ -288,7 +308,8 @@ $(document).ready(
         
         function () {
             //connect();
-            $("#seleccionDocu").show();
+            $("#seleccionDocu").hide();
+            $("#documento").hide();
             $("#failName").hide(); 
             $("#failUser").hide(); 
             $("#failPass").hide();

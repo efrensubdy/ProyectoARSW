@@ -59,7 +59,9 @@ public class Usuario {
     }
     
     public ArrayList<String> getDocumentosNames(){
-        return new ArrayList<>(documentos.keySet());
+        ArrayList<String> array = new ArrayList<>(documentos.keySet());
+        array.add(0, ""+documentos.keySet().size());
+        return array;
     }
     
     public boolean comprobarExisteDocumento(Documento documento){
