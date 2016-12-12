@@ -17,7 +17,7 @@ public class Usuario {
     private String username;
     private String password;
     
-    private ConcurrentHashMap<String, Documento> documentos = new ConcurrentHashMap<>(); 
+    private final ConcurrentHashMap<String, Documento> documentos = new ConcurrentHashMap<>(); 
     
     public Usuario(){
         
@@ -45,12 +45,14 @@ public class Usuario {
         this.password = password;
     }
     
+    public Documento getSingleDocumento(String nombreDoc){
+        return documentos.get(nombreDoc);
+    }
+    
     public boolean addDocumento(Documento documento){
         boolean res = false;
-        System.out.println("nomDoc " + documento.getNombreDoc());
         if(!documentos.containsKey(documento.getNombreDoc())){
             documentos.put(documento.getNombreDoc(), documento);
-            System.out.println("-> " + documento.getAutor() + " - " + this.username);
             res = true;
         }
         return res;
@@ -58,6 +60,10 @@ public class Usuario {
     
     public ArrayList<String> getDocumentosNames(){
         return new ArrayList<>(documentos.keySet());
+    }
+    
+    public boolean comprobarExisteDocumento(Documento documento){
+        return documentos.containsKey(documento.getNombreDoc());
     }
    
 }

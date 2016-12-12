@@ -12,6 +12,7 @@ function Documento(nombreDoc, autor, texto){
 }
 
 var usuarioActual;
+var documentoActual;
 var stompClient = null;
 var tinymce;
 var docName = "";
@@ -53,6 +54,7 @@ function requestDocName() {
                 docName = nombreDoc;
                 crearPantallaTexto();
                 console.log('Documento creado: ' + docName);
+                documentoActual = new Documento(nombreDoc, usuarioActual.username , "");
             }else{
                 alert("Nombre invalido o ya existente");
             }
@@ -64,8 +66,9 @@ function requestDocName() {
 
 function crearPantallaTexto(){
     $("#textarea").append("<textarea id="+"test"+"></textarea>");
-    $("#textarea").append("<button onclick"+"=exportar()"+">Exportar Documento</button>");
-    $("#textarea").append("<button onclick"+"=lines()"+">lineas</button>");
+    $("#textarea").append("<button onclick"+"=exportar()"+">Exportar</button>");
+    $("#textarea").append("<button onclick"+"=lineas()"+">Lineas</button>");
+    $("#textarea").append("<button onclick"+"=compartir()"+">Compartir</button>");
     tinymce.init({
     selector: "textarea",
     height: 300,
@@ -101,18 +104,24 @@ function abrirDoc(){
     url = "/texto/";
     
     if(nombreDoc !== null && nombreDoc !== ''){
-        var jsPromise = Promise.resolve($.get( url + nombreDoc));
+        var jsPromise = Promise.resolve($.get( url + nombreDoc, {username: usuarioActual.username}));
         jsPromise.then(function(response) {
-            alert("Documento abierto");
-            var obj = jQuery.parseJSON(response);
-            $("#nombreDocu").html("<h1>"+ obj.nombreDoc + " - " + obj.autor +"</h1>");    
-            docName = nombreDoc;
-            crearPantallaTexto();
-            tinymce.activeEditor.setContent(obj.texto);
-            //Se conecta
-            connect();
-            arreglarHTML();
-            console.log('Documento abierto: ' + docName);
+            if(response){
+                alert("Documento abierto" + "- " + response);
+                var obj = jQuery.parseJSON(response);
+                alert(obj);
+                documentoActual = new Documento(obj.nombreDoc, obj.autor, obj.texto);
+                $("#nombreDocu").html("<h1>"+ documentoActual.nombreDoc + " - " + documentoActual.autor +"</h1>");    
+                docName = nombreDoc;
+                crearPantallaTexto();
+                tinymce.activeEditor.setContent(documentoActual.texto);
+                //Se conecta
+                connect();
+                arreglarHTML();
+                console.log('Documento abierto: ' + docName);
+            }else{
+                alert("Usted no tiene permisos para abrir el documento");
+            }
         },function() {
             alert("El documento no existe");
         });
@@ -242,7 +251,7 @@ function destroyClickedElement(event){
     document.body.removeChild(event.target);
 }
 
-function lines(){       
+function lineas(){       
     //Cuenta las lineas que haya en el documento
     var text = document.getElementById('test');
     var cnt = (text.cols);
@@ -251,6 +260,28 @@ function lines(){
     var lineBreaksCount = (text.value.split('\r\n'));
     alert(lineBreaksCount.length);
     alert(Math.round(lineCount)+1);
+}
+
+function compartir(){
+    url = "/texto/shareDoc/" + documentoActual.nombreDoc + "/";
+    var username = prompt("Digite el nombre del usuario a compartir");
+    
+    if(username !== null && username !== ''){
+        var jsPromise = Promise.resolve($.post(url + username, {autor: usuarioActual.username}));
+
+        jsPromise.then(function(response) {
+            if(response){
+                alert("Documento compartido");
+                console.log('Documento compartido: ' + docName + " -> " + username);
+            }else{
+                alert("Nombre invalido o ya existente");
+            }
+        },function() {
+            alert("El usuario no existe");
+        });
+    }else if(username === ''){
+        alert("No se ingreso nada");
+    }
 }
 
 $(document).ready(

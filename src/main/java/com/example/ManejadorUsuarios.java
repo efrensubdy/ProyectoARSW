@@ -48,12 +48,20 @@ public class ManejadorUsuarios {
         }
     }
     
+    public boolean compartirDocumento(String nombreDoc, String autor, String username){
+        return usuarios.get(username).addDocumento(usuarios.get(autor).getSingleDocumento(nombreDoc));
+    }
+    
     public boolean addDocumentoUsuario(String username, Documento docu){
         return usuarios.get(username).addDocumento(docu);
     }
     
     public Object[] getDocumentosUsuario(Usuario user){
         return usuarios.get(user.getUsername()).getDocumentosNames().toArray();
+    }
+    
+    public boolean comprobarExisteDocumento(String username, Documento documento){
+        return usuarios.get(username).comprobarExisteDocumento(documento);
     }
     
 }

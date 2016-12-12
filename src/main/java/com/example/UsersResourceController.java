@@ -55,6 +55,7 @@ public class UsersResourceController {
         return a;
     }
     
+    //incompleta
     @RequestMapping(path = "/documents", method = RequestMethod.POST)
     public ResponseEntity<?> manejadorDocumentsUser(Usuario user) {
         ResponseEntity a;

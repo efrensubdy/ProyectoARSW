@@ -50,11 +50,14 @@ public class DocumentsResourceController {
     
     @AnotacionUsuario
     @RequestMapping(path = "/{nombreDoc}", method = RequestMethod.GET)
-    public ResponseEntity<?> manejadorGetTextoDocumento(@PathVariable String nombreDoc){
+    public ResponseEntity<?> manejadorGetTextoDocumento(@PathVariable String nombreDoc, String username){
         ResponseEntity a;
         try {
             ObjectMapper mapper = new ObjectMapper();
-            a = new ResponseEntity<>(mapper.writeValueAsString(docus.getDocumento(nombreDoc)),HttpStatus.ACCEPTED);
+            Documento docu = docus.getDocumento(nombreDoc);
+            a = (users.comprobarExisteDocumento(username, docu)
+                    ? new ResponseEntity<>(mapper.writeValueAsString(docu),HttpStatus.ACCEPTED) 
+                    : null);
         } catch (Exception ex) {
             Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
             a = new ResponseEntity<>("Seguramente un NullPointerException (No existe el documento)",HttpStatus.NOT_FOUND);
@@ -93,13 +96,24 @@ public class DocumentsResourceController {
     
     
     @RequestMapping(path = "/addDoc/{nombreDoc}", method = RequestMethod.POST)
-    public ResponseEntity<?> manejadorNewDocumento(@PathVariable String nombreDoc, String autor) {
-        //Crear documento
-        //cambiar Pepito por usuario cuando la funcionalidad correcta de usuario cuando este lista
+    public ResponseEntity<?> manejadorNewDocumento(@PathVariable String nombreDoc, String autor){
         ResponseEntity a;
         try {
-            System.out.println("Nuevo documento creado: " + nombreDoc + " - Autor: " + autor);
+            //System.out.println("Nuevo documento creado: " + nombreDoc + " - Autor: " + autor);
             a = new ResponseEntity<>(users.addDocumentoUsuario(autor, docus.newDocumento(nombreDoc, autor)), HttpStatus.ACCEPTED);
+        } catch (Exception ex) {
+            Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
+            a = new ResponseEntity<>("Error bla bla bla",HttpStatus.NOT_FOUND);
+        }        
+        return a;
+    }
+    
+    @RequestMapping(path = "/shareDoc/{nombreDoc}/{username}", method = RequestMethod.POST)
+    public ResponseEntity<?> manejadorCompartirDocumento(@PathVariable String nombreDoc, @PathVariable String username, String autor){
+        ResponseEntity a;
+        try {
+            //System.out.println("Compartir documento " + nombreDoc + " - de " + autor + " para " + username);
+            a = new ResponseEntity<>(users.compartirDocumento(nombreDoc, autor, username), HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
             a = new ResponseEntity<>("Error bla bla bla",HttpStatus.NOT_FOUND);
