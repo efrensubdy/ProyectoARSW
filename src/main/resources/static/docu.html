@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Proyecto ARSW - Registrar</title>
+        <title>Proyecto ARSW - Documento</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/webjars/jquery/jquery.min.js"></script>
@@ -27,14 +27,9 @@
                     <input id ="abrir" type="text" />
                     <button onclick="abrirDoc()">Abrir Documento</button> 
                 </div>
-               
-                <form th:action="@{/logout}" method="post">
-                    <input type="submit" value="Sign Out"/>
-                </form>
+                <div id="textarea"></div>
             </div>
         </div>
-        <p>Click <a th:href="@{/hello}">here</a> to see a greeting.</p>
-        <div id="textarea"></div>
     </body>
 
 </html>

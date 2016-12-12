@@ -31,7 +31,7 @@ public class ManejadorUsuarios {
     
     public ManejadorUsuarios(){
         usuarios = new ConcurrentHashMap<>();
-        Usuario newUser = new Usuario("pepito","pepito", "asd");
+        Usuario newUser = new Usuario("pepito", "asd");
         usuarios.put("pepito", newUser);
     }
     
@@ -40,12 +40,16 @@ public class ManejadorUsuarios {
     }
     
     public boolean registrarUsuario(Usuario user) throws Exception{
-        if(!usuarios.containsKey(user.getUsername()) && !usuarios.containsKey(user.getNombre())){
+        if(!usuarios.containsKey(user.getUsername())){
             usuarios.put(user.getUsername(), user);
             return true;
         }else{
             throw new Exception();
         }
+    }
+    
+    public boolean addDocumentoUsuario(String username, Documento docu){
+        return usuarios.get(username).addDocumento(docu);
     }
     
     public Object[] getDocumentosUsuario(Usuario user){

@@ -1,15 +1,20 @@
 /* global Promise */
 
-function Usuario(nombre,username,password){
-    this.nombre = nombre;
+function Usuario(username,password){
     this.username = username;
     this.password = password;
 }
 
+function Documento(nombreDoc, autor, texto){
+    this.nombreDoc = nombreDoc;
+    this.autor = autor;
+    this.texto = texto;
+}
+
+var usuarioActual;
 var stompClient = null;
 var tinymce;
 var docName = "";
-var name = "";
 var username = "";
 var password = "";
 
@@ -36,16 +41,15 @@ function disconnect() {
 }
 
 function requestDocName() {
-    url = "/texto";
+    url = "/texto/addDoc/";
     var nombreDoc = prompt("Digite el nombre del nuevo documento");
     
     if(nombreDoc !== null && nombreDoc !== ''){
-        var jsPromise = Promise.resolve($.post(url, {nombreDoc: nombreDoc}));
+        var jsPromise = Promise.resolve($.post(url + nombreDoc, {autor: usuarioActual.username}));
 
         jsPromise.then(function(response) {
             if(response){
                 alert("Documento creado");
-
                 docName = nombreDoc;
                 crearPantallaTexto();
                 console.log('Documento creado: ' + docName);
@@ -100,10 +104,11 @@ function abrirDoc(){
         var jsPromise = Promise.resolve($.get( url + nombreDoc));
         jsPromise.then(function(response) {
             alert("Documento abierto");
-
+            var obj = jQuery.parseJSON(response);
+            $("#nombreDocu").html("<h1>"+ obj.nombreDoc + " - " + obj.autor +"</h1>");    
             docName = nombreDoc;
             crearPantallaTexto();
-            tinymce.activeEditor.setContent(response);
+            tinymce.activeEditor.setContent(obj.texto);
             //Se conecta
             connect();
             arreglarHTML();
@@ -121,7 +126,7 @@ function arreglarHTML(){
     $("#elementos").hide();
     $("#pantallaLogin").hide();
     //Muestra el nombre del documento actual
-    $("#nombreDocu").html("<h1>"+ docName +"</h1>");
+    $("#nombreDocu").html("<h1>"+ docName + " - " + usuarioActual.username +"</h1>");
 }
 
 function checkTextBoxes(){
@@ -156,22 +161,22 @@ function checkTextBoxes(){
 
 function loginUser(){
     url = "/user/login";
-    
     if(checkTextBoxes()){
         //post para comprobar usuario
         $.ajax({
             url: url,
             data: {
-                nombre: username,
                 username: username,
                 password: password
             },
             type: 'POST',
             success: function() {
                 alert("Bienvenido");
+                usuarioActual = new Usuario(username, password);
                 $("#pantallaLogin").hide();
                 $("#seleccionDocu").show();
-                window.location="docu.html";
+                $("#nombreDocu").html("<h1>Bienvenido - " + usuarioActual.username +"</h1>");
+                //window.location="docu.html";
             }
         }).fail( function(){
             alert("Datos Inválidos");
@@ -181,23 +186,12 @@ function loginUser(){
 
 function registrerUser(){
     url = "/user/registrer";
-    name = $("#justname").val();
-    var nomGood = false;
-    
-    if(name === ''){
-        $("#failName").show();
-        nomGood = false;
-    }else{
-        $("#failName").hide(); 
-        nomGood = true;
-    }
-    
-    if(checkTextBoxes() && nomGood){
+
+    if(checkTextBoxes()){
         //post para registrar usuario
         $.ajax({
             url: url,
             data: {
-                nombre: name,
                 username: username,
                 password: password
             },

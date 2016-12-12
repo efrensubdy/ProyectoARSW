@@ -9,6 +9,7 @@ package com.example;
  *
  * @author 2092955
  */
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,9 @@ public class DocumentsResourceController {
     @Autowired
     ManejadorDocumentosInterfaz docus;
     
+    @Autowired
+    ManejadorUsuarios users;
+    
     /* Temporal
     TODO Aspecto de usuarios
     @Autowired
@@ -49,7 +53,8 @@ public class DocumentsResourceController {
     public ResponseEntity<?> manejadorGetTextoDocumento(@PathVariable String nombreDoc){
         ResponseEntity a;
         try {
-            a = new ResponseEntity<>(docus.getTextoDocumento(nombreDoc),HttpStatus.ACCEPTED);
+            ObjectMapper mapper = new ObjectMapper();
+            a = new ResponseEntity<>(mapper.writeValueAsString(docus.getDocumento(nombreDoc)),HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
             a = new ResponseEntity<>("Seguramente un NullPointerException (No existe el documento)",HttpStatus.NOT_FOUND);
@@ -86,14 +91,15 @@ public class DocumentsResourceController {
     }
     
     
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> manejadorNewDocumento(String nombreDoc) {
+    
+    @RequestMapping(path = "/addDoc/{nombreDoc}", method = RequestMethod.POST)
+    public ResponseEntity<?> manejadorNewDocumento(@PathVariable String nombreDoc, String autor) {
         //Crear documento
         //cambiar Pepito por usuario cuando la funcionalidad correcta de usuario cuando este lista
         ResponseEntity a;
         try {
-            //System.out.println("Nuevo documento creado: " + nombreDoc);
-            a = new ResponseEntity<>(docus.newDocumento(nombreDoc, "Pepito"), HttpStatus.ACCEPTED);
+            System.out.println("Nuevo documento creado: " + nombreDoc + " - Autor: " + autor);
+            a = new ResponseEntity<>(users.addDocumentoUsuario(autor, docus.newDocumento(nombreDoc, autor)), HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
             a = new ResponseEntity<>("Error bla bla bla",HttpStatus.NOT_FOUND);

@@ -23,14 +23,14 @@ public class ManejadorDocumentos implements ManejadorDocumentosInterfaz{
     }
     
     @Override
-    public boolean newDocumento(String nombreDoc, String autor){
-        boolean valid = false;
+    public Documento newDocumento(String nombreDoc, String autor){
+        Documento res = null;
         if(validarNombreDocumento(nombreDoc)){
             Documento newDoc = new Documento(nombreDoc, autor);
             documentos.put(nombreDoc, newDoc);
-            valid = true;
+            res = newDoc;
         }
-        return valid;
+        return res;
     };
     
     @Override
@@ -39,8 +39,8 @@ public class ManejadorDocumentos implements ManejadorDocumentosInterfaz{
     }
     
     @Override
-    public String getTextoDocumento(String nombreDoc) throws NullPointerException{
-        return documentos.get(nombreDoc).getTexto();
+    public Documento getDocumento(String nombreDoc) throws NullPointerException{
+        return documentos.get(nombreDoc);
     }
     
     @Override

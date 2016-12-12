@@ -13,11 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public interface ManejadorDocumentosInterfaz {
     
-    public boolean newDocumento(String nombreDoc, String autor);
+    public Documento newDocumento(String nombreDoc, String autor);
     
     public void setTextoDocumento(String nombreDoc, String texto);
     
-    public String getTextoDocumento(String nombreDoc);
+    public Documento getDocumento(String nombreDoc);
     
     public boolean validarNombreDocumento(String nombreDoc);
 }

@@ -14,31 +14,21 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Usuario {
 
-    private String nombre;
     private String username;
     private String password;
     
-    private ConcurrentHashMap<String, Documento> documentos; 
+    private ConcurrentHashMap<String, Documento> documentos = new ConcurrentHashMap<>(); 
     
     public Usuario(){
-        documentos = new ConcurrentHashMap<>();
+        
     }
     
-    public Usuario(String nombre, String username, String password){
+    public Usuario(String username, String password){
         super();
-        this.nombre = nombre;
         this.username = username;
         this.password = password;
     }
-    
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
+ 
     public String getUsername() {
         return username;
     }
@@ -55,9 +45,15 @@ public class Usuario {
         this.password = password;
     }
     
-    public void addDocumento(Documento documento){
-        if(!documentos.containsKey(documento.getNombreDoc()))
+    public boolean addDocumento(Documento documento){
+        boolean res = false;
+        System.out.println("nomDoc " + documento.getNombreDoc());
+        if(!documentos.containsKey(documento.getNombreDoc())){
             documentos.put(documento.getNombreDoc(), documento);
+            System.out.println("-> " + documento.getAutor() + " - " + this.username);
+            res = true;
+        }
+        return res;
     }
     
     public ArrayList<String> getDocumentosNames(){
