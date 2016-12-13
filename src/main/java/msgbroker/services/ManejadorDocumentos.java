@@ -23,6 +23,12 @@ public class ManejadorDocumentos implements ManejadorDocumentosInterfaz{
         documentos = new ConcurrentHashMap<>();
     }
     
+    /**
+     * Crea un nuevo documento
+     * @param nombreDoc El nombre del nuevo documento
+     * @param autor El nombre del autor del documento
+     * @return  El objecto documento nuevo, null si ya existia
+     */
     @Override
     public Documento newDocumento(String nombreDoc, String autor){
         Documento res = null;
@@ -34,16 +40,32 @@ public class ManejadorDocumentos implements ManejadorDocumentosInterfaz{
         return res;
     };
     
+    /**
+     * Modifica el texto de un documento
+     * @param nombreDoc El nombre del documento
+     * @param texto El nuevo texto
+     */
     @Override
     public void setTextoDocumento(String nombreDoc, String texto){
         documentos.get(nombreDoc).setTexto(texto);
     }
     
+    /**
+     * Devuelve un objeto documento con el nombre como parametro
+     * @param nombreDoc El nombre del documento
+     * @return El objeto documento
+     * @throws NullPointerException si el documento no existe
+     */
     @Override
     public Documento getDocumento(String nombreDoc) throws NullPointerException{
         return documentos.get(nombreDoc);
     }
     
+    /**
+     * Valida si no existe otro documento ya creado con un nombre particular
+     * @param nombreDoc El nombre de un documento a validar
+     * @return  True si el documento con ese nombre no existe, false de lo contrario
+     */
     @Override
     public boolean validarNombreDocumento(String nombreDoc){
         nombreDoc = nombreDoc.trim();

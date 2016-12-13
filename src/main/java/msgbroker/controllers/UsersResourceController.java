@@ -6,19 +6,12 @@
 package msgbroker.controllers;
 
 import msgbroker.model.Usuario;
-import msgbroker.services.ManejadorUsuariosInterfaz;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,17 +27,13 @@ import msgbroker.persistence.ManejadorPersistenciaInterfaz;
 @RequestMapping(value="/user")
 public class UsersResourceController {
     
-    //@Autowired
-    //ManejadorUsuariosInterfaz users;
-    
     @Autowired
     ManejadorPersistenciaInterfaz users;
     
     /**
      * Manejador para el recurso de login (/login)
      * @param user Recibe un usuario construido en el body. Esto se hace mediante un json con los atributos de username y password.
-     * @return true si el usuario fue logeado correctamente
-     * false si el usuario existe en la base de datos pero la contraseña fue invalida
+     * @return true si el usuario fue logeado correctamente, false si el usuario existe en la base de datos pero la contraseña fue invalida, 
      * failed si el usuario no existe en la base de datos
      */
     @RequestMapping(path = "/login", method = RequestMethod.POST)
@@ -59,6 +48,11 @@ public class UsersResourceController {
         return a;
     }
     
+    /**
+     * Maneja las peticiones para registrar usuarios
+     * @param user  El objeto del nuevo usuario
+     * @return True si el usuario fue agregado correctamente, exception "HttpStatus.NOT_FOUND" si el usuario ya existe
+     */
     @RequestMapping(path = "/registrer", method = RequestMethod.POST)
     public ResponseEntity<?> manejadorRegistrerUser(Usuario user) {
         ResponseEntity a;
@@ -71,6 +65,11 @@ public class UsersResourceController {
         return a;
     }
     
+    /**
+     * Maneja las peticiones para devolver los documentos que posee un usuario
+     * @param username  El usuario con documentos
+     * @return Un arreglo Object[] 
+     */
     @RequestMapping(path = "/listaDocumentos/{username}", method = RequestMethod.GET)
     public ResponseEntity<?> manejadorDocumentsUser(@PathVariable String username) {
         ResponseEntity a;
@@ -83,5 +82,4 @@ public class UsersResourceController {
         }        
         return a;
     }
-    
 }

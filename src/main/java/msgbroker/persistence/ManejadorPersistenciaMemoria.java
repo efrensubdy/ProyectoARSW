@@ -58,7 +58,7 @@ public class ManejadorPersistenciaMemoria implements ManejadorPersistenciaInterf
     public boolean comprobarExisteDocumento(String username, Documento documento){
         return usuarios.comprobarExisteDocumento(username, documento);
     }
-    
+/////////////////////////////////////////////////////////////////////////////////////////
     
     //Documentos
     @Override
