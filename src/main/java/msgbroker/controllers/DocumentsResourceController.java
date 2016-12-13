@@ -30,6 +30,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import msgbroker.persistence.ManejadorPersistenciaInterfaz;
 
 
 @Component
@@ -42,23 +43,24 @@ public class DocumentsResourceController {
     SimpMessagingTemplate msgt;
     
     @Autowired
-    ManejadorDocumentosInterfaz docus;
+    ManejadorPersistenciaInterfaz persistencia;
+    
+    /*
+    @Autowired
+    ManejadorDocumentosInterfaz persistencia;
     
     @Autowired
-    ManejadorUsuariosInterfaz users;
-    
-    /* Temporal
-    TODO Aspecto de usuarios
-    @Autowired
-    ManejadorUsuarios users;*/
+    ManejadorUsuariosInterfaz persistencia;
+    */
+   
     
     @RequestMapping(path = "/{nombreDoc}", method = RequestMethod.GET)
     public ResponseEntity<?> manejadorGetTextoDocumento(@PathVariable String nombreDoc, String username){
         ResponseEntity a;
         try {
             ObjectMapper mapper = new ObjectMapper();
-            Documento docu = docus.getDocumento(nombreDoc);
-            a = (users.comprobarExisteDocumento(username, docu)
+            Documento docu = persistencia.getDocumento(nombreDoc);
+            a = (persistencia.comprobarExisteDocumento(username, docu)
                     ? new ResponseEntity<>(mapper.writeValueAsString(docu),HttpStatus.ACCEPTED) 
                     : null);
         } catch (Exception ex) {
@@ -75,7 +77,7 @@ public class DocumentsResourceController {
         ResponseEntity a;
         try {
             //System.out.println("Nuevo documento creado: " + nombreDoc);
-            a = new ResponseEntity<>(docus.newDocumento(nombreDoc, user), HttpStatus.ACCEPTED);
+            a = new ResponseEntity<>(persistencia.newDocumento(nombreDoc, user), HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
             a = new ResponseEntity<>("Error bla bla bla",HttpStatus.NOT_FOUND);
@@ -87,7 +89,7 @@ public class DocumentsResourceController {
     public ResponseEntity<?> manejadorSetTextoDocumento(@PathVariable String nombreDoc, String texto){
         ResponseEntity a;
         try {
-            docus.setTextoDocumento(nombreDoc, texto);
+            persistencia.setTextoDocumento(nombreDoc, texto);
             a = new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,7 +105,7 @@ public class DocumentsResourceController {
         ResponseEntity a;
         try {
             //System.out.println("Nuevo documento creado: " + nombreDoc + " - Autor: " + autor);
-            a = new ResponseEntity<>(users.addDocumentoUsuario(autor, docus.newDocumento(nombreDoc, autor)), HttpStatus.ACCEPTED);
+            a = new ResponseEntity<>(persistencia.addDocumentoUsuario(autor, persistencia.newDocumento(nombreDoc, autor)), HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
             a = new ResponseEntity<>("Error bla bla bla",HttpStatus.NOT_FOUND);
@@ -116,7 +118,7 @@ public class DocumentsResourceController {
         ResponseEntity a;
         try {
             //System.out.println("Compartir documento " + nombreDoc + " - de " + autor + " para " + username);
-            a = new ResponseEntity<>(users.compartirDocumento(nombreDoc, autor, username), HttpStatus.ACCEPTED);
+            a = new ResponseEntity<>(persistencia.compartirDocumento(nombreDoc, autor, username), HttpStatus.ACCEPTED);
         } catch (Exception ex) {
             Logger.getLogger(DocumentsResourceController.class.getName()).log(Level.SEVERE, null, ex);
             a = new ResponseEntity<>("Error bla bla bla",HttpStatus.NOT_FOUND);
