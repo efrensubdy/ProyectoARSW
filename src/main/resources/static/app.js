@@ -151,6 +151,8 @@ function devolverInicio(){
     $("#seleccionDocu").show();
     $("#documento").hide();
     $("#nombreDocu").html("<h1>Bienvenido - " + usuarioActual.username +"</h1>");
+    $("#listaDocumentosDisponibles").html("");
+    getDocs();
 }
 
 function checkTextBoxes(){

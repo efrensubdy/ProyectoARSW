@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.example;
+package msgbroker.controllers;
 
+import msgbroker.model.Usuario;
+import msgbroker.services.ManejadorUsuariosInterfaz;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,8 +34,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class UsersResourceController {
     
     @Autowired
-    ManejadorUsuarios users;
+    ManejadorUsuariosInterfaz users;
     
+    /**
+     * Manejador para el recurso de login (/login)
+     * @param user Recibe un usuario construido en el body. Esto se hace mediante un json con los atributos de username y password.
+     * @return true si el usuario fue logeado correctamente
+     * false si el usuario existe en la base de datos pero la contraseña fue invalida
+     * failed si el usuario no existe en la base de datos
+     */
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> manejadorLoginUser(Usuario user) {
         ResponseEntity a;
@@ -58,7 +67,6 @@ public class UsersResourceController {
         return a;
     }
     
-    //incompleta
     @RequestMapping(path = "/listaDocumentos/{username}", method = RequestMethod.GET)
     public ResponseEntity<?> manejadorDocumentsUser(@PathVariable String username) {
         ResponseEntity a;
